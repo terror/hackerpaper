@@ -1,5 +1,5 @@
 import requests
-from urls import static_data, live_data
+from .urls import static_data, live_data
 
 
 class Request:
@@ -7,14 +7,7 @@ class Request:
         self.id = id
         self.type = type
 
-    def verify_params(self):
-        return self.id or self.type
-
     def fetch_data(self):
-        if not self.verify_params():
-            print("Invalid parameters!")
-            exit()
-
         try:
             if self.id and self.type:
                 data = requests.get(static_data(self.id, self.type)).json()

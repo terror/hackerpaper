@@ -1,6 +1,6 @@
 import requests
 import click
-from request import Request
+from .request import Request
 
 
 @click.command()
