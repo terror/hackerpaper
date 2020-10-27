@@ -12,7 +12,8 @@ class Request:
 
     def fetch_data(self):
         if not self.verify_params():
-            return "Invalid parameters"
+            print("Invalid parameters!")
+            exit()
 
         try:
             if self.id and self.type:
@@ -25,4 +26,4 @@ class Request:
         return data
 
     def ids_to_json(self, data):
-        return [requests.get(static_data(i, "item")).json() for i in data]
+        return [requests.get(static_data(id, "item")).json() for id in data]
