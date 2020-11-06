@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name="hackerpaper",
-    version="0.0.2",
+    version="1.0.0",
     author="Liam Scalzulli",
     author_email="liamscalzulli@gmail.com",
     description=("Hacker News to Instapaper"),

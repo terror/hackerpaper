@@ -1,7 +1,7 @@
 import requests
 import click
 from urllib.parse import urlparse
-from request import Request
+from .request import Request
 
 
 @click.command()
