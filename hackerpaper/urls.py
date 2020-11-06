@@ -1,6 +1,7 @@
-# hn api endpoints for static and live data
+import click
 
-static_types = ["item"]
+static_type = "item"
+
 live_types = [
     "askstories",
     "livestories",
@@ -12,8 +13,14 @@ live_types = [
 
 
 def static_data(id, type):
-    if type.lower() not in static_types:
-        return "Invalid type"
+    """Returns url for a static data request (single article)
+
+    :param id: id of hacker news article
+    :param type: type of hacker news article (item)
+    :return: url for static data request
+    """
+    if type.lower() != static_type:
+        display_error()
 
     return "https://hacker-news.firebaseio.com/v0/{}/{}.json?print=pretty".format(
         type.lower(), id
@@ -21,9 +28,20 @@ def static_data(id, type):
 
 
 def live_data(type):
+    """Returns url for a live data request
+
+    :param type: type of hacker news articles
+    :return: url for live data request
+    """
     if type.lower() not in live_types:
-        return "Invalid type"
+        display_error()
 
     return "https://hacker-news.firebaseio.com/v0/{}.json?print=pretty".format(
         type.lower()
     )
+
+
+def display_error():
+    """Display's error message"""
+    click.secho("Invalid type!", fg="red")
+    exit()

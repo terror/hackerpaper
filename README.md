@@ -11,9 +11,9 @@ $ pip install hackerpaper
 ### Arguments
 `--account, -a`: required, email and password to your instapaper account.  
 
-`--id`: optional, HackerNews article id to add.  
+`--id, -id`: optional, HackerNews article id to add.  
 
-`--type, -t`: required, type of HackerNews article, if id is blank, will scrape posts with given type
+`--type, -t`: required, type of HackerNews article, if id is blank, will scrape posts with given type,
 see [here](https://github.com/terror/hackerpaper/blob/master/types.txt) for the full list of valid types.  
 
 `--interests, -i`: optional, subdomains of the HackerNews articles
@@ -24,3 +24,5 @@ see [here](https://github.com/terror/hackerpaper/blob/master/types.txt) for the 
 $ hackerpaper -a <email> <pass> -t newstories -i github
 ```
 
+The above example will add all HackerNews articles under the `newstories` type that have the subdomain `github`
+to your Instapaper account.
