@@ -1,22 +1,35 @@
-## hackerpaper 
+## hackerpaper
+
 Hacker News Articles to your Instapaper.
 
 ### Usage
+
 Simply install hackerpaper using pip
 
 ```bash
 $ pip install hackerpaper
 ```
 
-### Arguments
-`--account, -a`: required, email and password to your instapaper account.  
+### Options
 
-`--id, -id`: optional, HackerNews article id to add.  
+```
+Usage: cli.py [OPTIONS]
 
-`--type, -t`: required, type of HackerNews article, if id is blank, will scrape posts with given type,
-see [here](https://github.com/terror/hackerpaper/blob/master/types.txt) for the full list of valid types.  
+  Entry point for the cli
 
-`--interests, -i`: optional, subdomains of the HackerNews articles
+  :param account: user's Instapaper account information :param id:
+  hackernews article id :param type: type of hackernews articles :param
+  interests: array of subdomains user is interested in
+
+Options:
+  -a, --account <TEXT TEXT>...  Instapaper account information  [required]
+  -id, --id TEXT                HackerNews article ID
+  -t, --type TEXT               HackerNews article type  [required]
+  -l, --limit INTEGER           A cap on how many articles to add
+  -i, --interests TEXT          Subdomains of the HackerNews articles
+  --help                        Show this message and exit.
+
+```
 
 ### Example
 

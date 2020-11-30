@@ -1,38 +1,46 @@
 import requests
 import click
 from urllib.parse import urlparse
-from .request import Request
+from request import Request
 
 
 @click.command()
-# Instapaper email and password (required)
 @click.option(
     "--account",
     "-a",
     required=True,
     nargs=2,
     default=[None] * 2,
+    help="Instapaper account information",
     type=click.Tuple([str, str]),
 )
-# HackerNews article id (optional)
 @click.option(
     "--id",
-    "-id"
+    "-id",
+    help="HackerNews article ID",
+    required=False
 )
-# HackerNews article type (required)
 @click.option(
     "--type",
     "-t",
+    help="HackerNews article type",
     required=True
 )
-# Subdomains of the HackerNews urls (optional)
+@click.option(
+    "--limit",
+    "-l",
+    help="A cap on how many articles to add",
+    type=int,
+    required=False
+)
 @click.option(
     "--interests",
     "-i",
+    help="Subdomains of the HackerNews articles",
     multiple=True,
     default=[],
 )
-def cli(account, id, type, interests):
+def cli(account, id, type, limit, interests):
     """Entry point for the cli
 
     :param account: user's Instapaper account information
@@ -48,7 +56,7 @@ def cli(account, id, type, interests):
 
     res = Request(id, type).fetch_data()
     try:
-        add_to_instapaper(account, res, interests)
+        add_to_instapaper(account, res, limit, interests)
         click.secho("Process complete!", fg="green")
     except Exception as error:
         print("Error: {}", error)
@@ -63,8 +71,7 @@ def authenticate(account):
     username, password = account[0], account[1]
 
     res = requests.get(
-        "https://www.instapaper.com/api/authenticate?username={}&password={}"
-        .format(
+        "https://www.instapaper.com/api/authenticate?username={}&password={}".format(
             username, password
         )
     )
@@ -74,7 +81,7 @@ def authenticate(account):
     return False
 
 
-def add_to_instapaper(account, res, interests):
+def add_to_instapaper(account, res, limit, interests):
     """Processes and calls post on array of hackernews post objects
 
     :param account: user's Instapaper account information
@@ -94,8 +101,15 @@ def add_to_instapaper(account, res, interests):
             print("[~] Filtering posts...")
             posts = filter_posts(posts, interests)
 
-        for p in posts:
-            post(username, password, p["url"])
+        if limit is not None:
+            added = 0
+            for p in posts:
+                added += post(username, password, p["url"])
+                if added == limit:
+                    break
+        else:
+            for p in posts:
+                post(username, password, p["url"])
     else:
         if "url" in res:
             post(username, password, res["url"])
@@ -109,12 +123,18 @@ def post(username, password, url):
     """
     print("[~] Adding URL: {} to Instapaper...\n".format(url))
 
-    requests.post(
-        "https://www.instapaper.com/api/add?username={}&password={}&url={}"
-        .format(
-            username, password, url
+    try:
+        requests.post(
+            "https://www.instapaper.com/api/add?username={}&password={}&url={}".format(
+                username, password, url
+            )
         )
-    )
+    except Exception as error:
+        click.secho(
+            "Error adding URL to Instapaper: {}".format(error), fg="red")
+        exit()
+
+    return 1
 
 
 def filter_posts(posts, interests):

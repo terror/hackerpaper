@@ -1,5 +1,5 @@
 import requests
-from .urls import static_data, live_data
+from urls import static_data, live_data
 
 
 class Request:
